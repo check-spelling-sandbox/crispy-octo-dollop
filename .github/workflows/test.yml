@@ -6,7 +6,7 @@ on:
       - '**'
     tags-ignore:
       - '**'
-  pull_request_target:
+  pull_request:
     branches:
       - '**'
     types:
@@ -48,6 +48,7 @@ jobs:
             test/3.hocon
           artifact-name: ${{ matrix.artifact-name }}
           indentation: ${{ matrix.indentation }}
+          suppress-failure: 1
 
       - name: Report
         shell: bash

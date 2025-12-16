@@ -5,6 +5,10 @@ branding:
   icon: 'edit-3'
   color: 'yellow'
 inputs:
+  artifact-name:
+    description: 'Artifact name'
+    default: ''
+    required: false
   hocon-files:
     description: 'List of hocon files to format'
     required: false
@@ -19,12 +23,12 @@ inputs:
     description: 'Number of tasks to run concurrently (detected automatically unless specified)'
     default: ''
     required: false
-  suppress-summary:
-    description: 'If you do not want to generate a github step summary'
+  suppress-failure:
+    description: 'If you do not want to fail when changes are required'
     default: ''
     required: false
-  artifact-name:
-    description: 'Artifact name'
+  suppress-summary:
+    description: 'If you do not want to generate a github step summary'
     default: ''
     required: false
 
@@ -50,3 +54,9 @@ runs:
       with:
         name: ${{ inputs.artifact-name || format('hocon-formatted-{0}-{1}-{2}', github.run_number, github.run_attempt, steps.format.outputs.id) }}
         path: ${{ steps.format.outputs.files }}
+    - name: Fail
+      if: steps.format.outputs.files && ! inputs.suppress-failure
+      run: |
+        : Fail
+        exit 1
+      shell: bash
